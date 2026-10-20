@@ -1,7 +1,5 @@
 """The sum of the numbers in a list."""
 
-import numbers
-
 
 def sum_numbers(numbers: list[float]) -> float:
     return sum(numbers)
