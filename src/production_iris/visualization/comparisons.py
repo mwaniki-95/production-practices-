@@ -9,6 +9,7 @@ def plot_categorical_features(
     df: pd.DataFrame,
 ) -> plt.Figure:
     """Plot category counts for string and categorical columns."""
+
     categorical_columns = df.select_dtypes(
         include=["object", "string", "category"]
     ).columns
