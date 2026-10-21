@@ -2,17 +2,11 @@
 
 In this session I rebuilt notebook code (loading Iris, exploring it, plotting it) as a proper Python package called `production-iris`, imported as `production_iris`. The aim was not new maths. It was to make the code **installable**, **testable**, and **clean**, so it runs on any machine and not only inside one notebook.
 
-$$
-\begin{array}{|l|l|l|}
-\hline
-\textbf{Quality} & \textbf{Tool} & \textbf{How I know it works} \\
-\hline
-\text{Installable} & \texttt{pyproject.toml} + \texttt{pip} & \text{The package imports from any folder in the venv} \\
-\text{Testable} & \texttt{pytest} & \text{All tests pass} \\
-\text{Clean} & \texttt{ruff} + \texttt{mypy} & \text{Style and type checks pass} \\
-\hline
-\end{array}
-$$
+| Quality | Tool | How I know it works |
+|---|---|---|
+| Installable | `pyproject.toml` + `pip` | The package imports from any folder in the venv |
+| Testable | `pytest` | All tests pass |
+| Clean | `ruff` + `mypy` | Style and type checks pass |
 
 ## 1. Project layout
 
@@ -38,24 +32,18 @@ production-iris/
     └── test_visualization.py
 ```
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{File or folder} & \textbf{Job} \\
-\hline
-\texttt{pyproject.toml} & \text{Package name, version, dependencies, tool settings} \\
-\texttt{src/production\_iris/} & \text{The installable code and nothing else} \\
-\texttt{\_\_init\_\_.py} & \text{Marks a folder as a package and re-exports the public functions} \\
-\texttt{data.py} & \text{Loads the dataset} \\
-\texttt{eda.py} & \text{Summary statistics and checks, returned as a dictionary} \\
-\texttt{mathutils.py} & \text{Small calculations with input validation} \\
-\texttt{visualization/} & \text{Plotting functions, in their own subpackage} \\
-\texttt{tests/} & \text{Automated checks, kept outside the package} \\
-\texttt{requirements.txt} & \text{Exact versions that worked, for reproducing the environment} \\
-\texttt{.gitignore} & \text{Files git must not track} \\
-\hline
-\end{array}
-$$
+| File or folder | Job |
+|---|---|
+| `pyproject.toml` | Package name, version, dependencies, tool settings |
+| `src/production_iris/` | The installable code and nothing else |
+| `__init__.py` | Marks a folder as a package and re-exports the public functions |
+| `data.py` | Loads the dataset |
+| `eda.py` | Summary statistics and checks, returned as a dictionary |
+| `mathutils.py` | Small calculations with input validation |
+| `visualization/` | Plotting functions, in their own subpackage |
+| `tests/` | Automated checks, kept outside the package |
+| `requirements.txt` | Exact versions that worked, for reproducing the environment |
+| `.gitignore` | Files git must not track |
 
 ## 2. Why the `src/` layout
 
@@ -114,19 +102,13 @@ line-length = 79
 select = ["E", "W", "F", "N"]
 ```
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{Section} & \textbf{Meaning} \\
-\hline
-\texttt{[build-system]} & \text{How pip builds the package} \\
-\texttt{dependencies} & \text{Libraries the package needs to run} \\
-\texttt{optional-dependencies [dev]} & \text{Tools only needed while developing} \\
-\texttt{packages.find, where = ["src"]} & \text{Tells pip the code lives in } \texttt{src/} \\
-\texttt{[tool.pytest...]}\text{, }\texttt{[tool.ruff...]} & \text{Settings for the test runner and linter} \\
-\hline
-\end{array}
-$$
+| Section | Meaning |
+|---|---|
+| `[build-system]` | How pip builds the package |
+| `dependencies` | Libraries the package needs to run |
+| `optional-dependencies [dev]` | Tools only needed while developing |
+| `packages.find, where = ["src"]` | Tells pip the code lives in `src/` |
+| `[tool.pytest...]`, `[tool.ruff...]` | Settings for the test runner and linter |
 
 The **install name** and the **import name** can differ: `scikit-learn` is installed, `sklearn` is imported, and `production-iris` is installed while `production_iris` is imported.
 
@@ -162,19 +144,13 @@ def load_iris_data() -> pd.DataFrame:
 
 Rules this file follows:
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{Rule} & \textbf{Reason} \\
-\hline
-\text{Imports at the top of the file} & \text{PEP 8; the dependencies are visible at a glance} \\
-\text{Load the dataset once, store it in a variable} & \text{Avoids repeating the same work} \\
-\text{Return the DataFrame, never print it} & \text{The caller decides what to do with it} \\
-\text{No code at module level that runs on import} & \text{Importing a module must have no side effects} \\
-\text{No } \texttt{try/except} \text{ that hides a failure} & \text{Returning an empty DataFrame only moves the error somewhere harder to trace} \\
-\hline
-\end{array}
-$$
+| Rule | Reason |
+|---|---|
+| Imports at the top of the file | PEP 8; the dependencies are visible at a glance |
+| Load the dataset once, store it in a variable | Avoids repeating the same work |
+| Return the DataFrame, never print it | The caller decides what to do with it |
+| No code at module level that runs on import | Importing a module must have no side effects |
+| No `try/except` that hides a failure | Returning an empty DataFrame only moves the error somewhere harder to trace |
 
 The rule from the error handling lessons applies: **raise where the problem is detected, catch where you can recover.**
 
@@ -192,16 +168,10 @@ __all__ = [
 ]
 ```
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{Import style} & \textbf{Works because} \\
-\hline
-\texttt{from production\_iris.data import load\_iris\_data} & \text{It names the module} \\
-\texttt{from production\_iris import load\_iris\_data} & \texttt{\_\_init\_\_.py} \text{ re-exports it} \\
-\hline
-\end{array}
-$$
+| Import style | Works because |
+|---|---|
+| `from production_iris.data import load_iris_data` | It names the module |
+| `from production_iris import load_iris_data` | `__init__.py` re-exports it |
 
 - The leading dot in `from .data import ...` means **this same folder**.
 - `__all__` lists the names the package officially offers. It also stops Ruff calling the imports unused (`F401`).
@@ -246,16 +216,10 @@ def exploratory_data_analysis(df: pd.DataFrame) -> dict[str, object]:
 
 Two ways to check code:
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{Way} & \textbf{Use} \\
-\hline
-\texttt{python -c "..."} & \text{A quick one-off look at one function} \\
-\texttt{pytest} & \text{A permanent record that re-checks everything on every run} \\
-\hline
-\end{array}
-$$
+| Way | Use |
+|---|---|
+| `python -c "..."` | A quick one-off look at one function |
+| `pytest` | A permanent record that re-checks everything on every run |
 
 ```bash
 python -c "from production_iris import load_iris_data; print(load_iris_data().shape)"
@@ -296,17 +260,11 @@ ruff format --check .
 mypy src
 ```
 
-$$
-\begin{array}{|l|l|l|}
-\hline
-\textbf{Tool} & \textbf{Checks} & \textbf{Standard} \\
-\hline
-\texttt{ruff check} & \text{Mistakes and style: unused imports, naming, spacing} & \text{PEP 8} \\
-\texttt{ruff format} & \text{Layout: line length, brackets, quotes} & \text{Consistent style} \\
-\texttt{mypy} & \text{Wrong types in calls and returns} & \text{PEP 484} \\
-\hline
-\end{array}
-$$
+| Tool | Checks | Standard |
+|---|---|---|
+| `ruff check` | Mistakes and style: unused imports, naming, spacing | PEP 8 |
+| `ruff format` | Layout: line length, brackets, quotes | Consistent style |
+| `mypy` | Wrong types in calls and returns | PEP 484 |
 
 - Type hints are **not enforced** when the program runs. A type checker such as mypy, or the editor, flags mismatches before you run the code.
 - A comma after the last item in a list or dictionary tells the formatter to put **one item per line**, with the closing bracket on its own line. Ruff's message `eda.py:25:6` gave the exact line and column of my misplaced brace.
@@ -335,43 +293,31 @@ This saves the exact versions of everything installed, minus the package itself.
 
 ## 12. Errors I hit and what fixed them
 
-$$
-\begin{array}{|l|l|l|}
-\hline
-\textbf{Error} & \textbf{Cause} & \textbf{Fix} \\
-\hline
-\texttt{ni: command not found} & \texttt{ni} \text{ is PowerShell; I was in bash} & \texttt{touch} \\
-\text{Command fails with odd characters at the start} & \text{Paste artifact in the terminal} & \text{Type the command by hand} \\
-\texttt{externally-managed-environment} & \text{pip ran on the system Python} & \text{Activate the project venv} \\
-\texttt{ModuleNotFoundError: production\_iris} & \text{Wrong venv, or package not installed} & \texttt{which python}\text{, } \texttt{pip install -e .} \\
-\texttt{ruff: command not found} & \text{Ruff lives in a different venv} & \text{Activate the right venv} \\
-\texttt{fatal: not a git repository} & \text{No } \texttt{.git} \text{ folder} & \texttt{git init -b main} \\
-\text{Ruff says the file would be reformatted} & \text{Layout differs from Ruff's style} & \texttt{ruff format file.py} \\
-\hline
-\end{array}
-$$
+| Error | Cause | Fix |
+|---|---|---|
+| `ni: command not found` | `ni` is PowerShell; I was in bash | `touch` |
+| Command fails with odd characters at the start | Paste artifact in the terminal | Type the command by hand |
+| `externally-managed-environment` | pip ran on the system Python | Activate the project venv |
+| `ModuleNotFoundError: production_iris` | Wrong venv, or package not installed | `which python`, `pip install -e .` |
+| `ruff: command not found` | Ruff lives in a different venv | Activate the right venv |
+| `fatal: not a git repository` | No `.git` folder | `git init -b main` |
+| Ruff says the file would be reformatted | Layout differs from Ruff's style | `ruff format file.py` |
 
 ## 13. Week 2 checklist
 
-$$
-\begin{array}{|l|l|}
-\hline
-\textbf{Item} & \textbf{Status} \\
-\hline
-\texttt{src/} \text{ layout, } \texttt{pyproject.toml}\text{, editable install} & \text{Done} \\
-\texttt{data.py}\text{, } \texttt{eda.py}\text{, re-exports in } \texttt{\_\_init\_\_.py} & \text{Done} \\
-\text{pytest running and passing} & \text{Done} \\
-\text{Type hints and input validation} & \text{Done on the modules written so far} \\
-\text{Tests that use } \texttt{pytest.raises} & \text{To do} \\
-\text{Remove } \texttt{plt.show()} \text{ from library code} & \text{To do} \\
-\text{Logging instead of } \texttt{print} & \text{To do} \\
-\text{Config as a dataclass, no globals} & \text{To do} \\
-\text{Model code (train and predict) from the Iris notebook} & \text{To do} \\
-\texttt{ruff} \text{ and } \texttt{mypy} \text{ on the whole package} & \text{To do} \\
-\text{Fresh clone, install, and test} & \text{To do} \\
-\hline
-\end{array}
-$$
+| Item | Status |
+|---|---|
+| `src/` layout, `pyproject.toml`, editable install | Done |
+| `data.py`, `eda.py`, re-exports in `__init__.py` | Done |
+| pytest running and passing | Done |
+| Type hints and input validation | Done on the modules written so far |
+| Tests that use `pytest.raises` | To do |
+| Remove `plt.show()` from library code | To do |
+| Logging instead of `print` | To do |
+| Config as a dataclass, no globals | To do |
+| Model code (train and predict) from the Iris notebook | To do |
+| `ruff` and `mypy` on the whole package | To do |
+| Fresh clone, install, and test | To do |
 
 ## 14. Command cheat sheet
 
