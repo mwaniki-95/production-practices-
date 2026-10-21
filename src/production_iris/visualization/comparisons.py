@@ -11,4 +11,3 @@ def compare_species_distribution(df):
     plt.title("Species Distribution")
     plt.xlabel("Species")
     plt.ylabel("Count")
-    plt.show()
