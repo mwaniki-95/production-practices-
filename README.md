@@ -1,5 +1,3 @@
-# production-practices
-
 # Production Python Week 2: From Notebook Code to an Installable Package
 
 In this session I rebuilt notebook code (loading Iris, exploring it, plotting it) as a proper Python package called `production-iris`, imported as `production_iris`. The aim was not new maths. It was to make the code **installable**, **testable**, and **clean**, so it runs on any machine and not only inside one notebook.
