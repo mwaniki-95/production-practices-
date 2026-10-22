@@ -5,12 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "production-iris"
 version = "0.1.0"
-description = "Iris EDA and math helper functions"
-requires-python = ">=3.9"
+description = "Iris EDA, preprocessing and model training pipeline"
+requires-python = ">=3.10"
 dependencies = ["pandas", "scikit-learn", "matplotlib", "seaborn"]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "mypy"]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+    "pandas-stubs",
+    "types-seaborn",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -24,3 +31,11 @@ line-length = 79
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "N"]
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = false
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+ignore_missing_imports = true
