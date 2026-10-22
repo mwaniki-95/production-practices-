@@ -311,13 +311,13 @@ This saves the exact versions of everything installed, minus the package itself.
 | `data.py`, `eda.py`, re-exports in `__init__.py` | Done |
 | pytest running and passing | Done |
 | Type hints and input validation | Done on the modules written so far |
-| Tests that use `pytest.raises` | To do |
-| Remove `plt.show()` from library code | To do |
-| Logging instead of `print` | To do |
-| Config as a dataclass, no globals | To do |
-| Model code (train and predict) from the Iris notebook | To do |
-| `ruff` and `mypy` on the whole package | To do |
-| Fresh clone, install, and test | To do |
+| Tests that use `pytest.raises` | Done |
+| Remove `plt.show()` from library code | Done |
+| Logging instead of `print` | Done |
+| Config as a dataclass, no globals | Done|
+| Model code (train and predict) from the Iris notebook | Done|
+| `ruff` and `mypy` on the whole package | Done|
+| Fresh clone, install, and test | Done |
 
 ## 14. Command cheat sheet
 
